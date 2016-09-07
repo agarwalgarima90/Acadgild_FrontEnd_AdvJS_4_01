@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Assignment 01</title>
+<style>
+	body {
+		text-align: center;
+	}
+
+	#vfuel {
+		display: none;
+	}
+
+	#details{
+		display: none;
+	}
+
+	#vehiclefuel {
+		display: none;
+	}
+</style>
+<script>
+
+	function vehicleType() {
+		var type = document.getElementById("vtype").value;
+		if(type == "Four Wheeler") {
+			document.getElementById("vfuel").style.display = "inline";
+		} else {
+			document.getElementById("vfuel").style.display = "none";
+		}
+	}
+	
+	//base class
+	var vehicle = function() {
+		this.name = document.getElementById("vname").value;
+		this.desc = document.getElementById("vdesc").value;
+		this.cost = document.getElementById("vcost").value;
+		this.type = document.getElementById("vtype").value;
+	}
+
+	//print function for class vehicle
+	vehicle.prototype.print = function() {
+		console.log("Name: " + this.name);
+		console.log("Desc: " + this.desc);
+		console.log("Cost: " + this.cost);
+		console.log("Type: " + this.type);
+
+		document.getElementById("form").style.display = "none";
+		document.getElementById("details").style.display = "inline";
+
+		document.getElementById("vehiclename").innerHTML = this.name;
+		document.getElementById("vehicledesc").innerHTML = this.desc;
+		document.getElementById("vehiclecost").innerHTML = this.cost;
+		document.getElementById("vehicletype").innerHTML = this.type;
+
+		if(this.type == "Two Wheeler") {
+			document.getElementById("header").innerHTML = "<h3>Two Wheeler Details</h3>";
+		} else if(this.type == "Four Wheeler") {
+			document.getElementById("header").innerHTML = "<h3>Four Wheeler Details</h3>";
+		}
+	}
+
+	//function to show details
+	function showDetails() {
+		var vehicleType = document.getElementById("vtype").value;
+		console.log(vehicleType);
+
+		if(vehicleType == "Four Wheeler") {
+			var four = new fourWheeler();
+			four.print();
+	 	}else { 
+			var two = new twoWheeler();
+			two.print();
+		}
+	}
+
+
+	//inherited class two wheeler
+	var twoWheeler = function() {
+		this.name = document.getElementById("vname").value;
+		this.desc = document.getElementById("vdesc").value;
+		this.cost = document.getElementById("vcost").value;
+		this.type = document.getElementById("vtype").value;
+
+		this.fuel = document.getElementById("vfuel").value;
+
+	}
+	
+
+	//inherited class four wheeler
+	var fourWheeler = function() {
+		this.name = document.getElementById("vname").value;
+		this.desc = document.getElementById("vdesc").value;
+		this.cost = document.getElementById("vcost").value;
+		this.type = document.getElementById("vtype").value;
+
+		this.fuel = document.getElementById("vfuel").value;
+	}
+
+	//inheriting
+	twoWheeler.prototype = Object.create(vehicle.prototype);
+	fourWheeler.prototype = Object.create(vehicle.prototype);
+	
+	fourWheeler.prototype.print = function() {
+		vehicle.prototype.print.call(this);
+		console.log("Fuel: " + this.fuel);
+		document.getElementById("vehiclefuel").innerHTML = "<br>Fuel Type: " + this.fuel;
+		document.getElementById("vehiclefuel").style.display = "inline";
+	}
+
+</script>
+</head>
+<body>
+	<div id="form">
+		<p>Vehicle Form</p>
+		<p><input type="text" id="vname" placeholder="Name"/></p>
+		<p><input type="text" id="vdesc" placeholder="Description"/></p>
+		<p><input type="text" id="vcost" placeholder="Cost per KM"/></p>
+		<p><select id="vtype" onchange="vehicleType()">
+			<option value="default">Vehicle Type</option>
+			<option value="Two Wheeler">Two Wheeler</option>
+			<option value="Four Wheeler">Four Wheeler</option>
+		</select></p>
+		<p><select id="vfuel">
+			<option value="CNG">CNG</option>
+			<option value="Petrol">Petrol</option>
+		</select></p>
+		<p><input type="submit" value="Submit" onclick="showDetails()"/>
+	</div>
+	<div id="details">
+		<p id="header"></p>
+		Name: <span id="vehiclename"></span><br>
+		Description: <span id="vehicledesc"></span><br>
+		Cost per km: <span id="vehiclecost"></span><br>
+		Vehicle Type: <span id="vehicletype"></span>
+		<span id="vehiclefuel"></span>
+	</div>
+
+</body>
+</html>
